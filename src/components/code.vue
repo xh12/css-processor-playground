@@ -35,7 +35,7 @@
         const editor = monaco.editor.create(root, {
             value: props.value,
             language: props.lang || 'css',
-            fontSize: 18
+            fontSize: 15
         })
         watch(() => props.value || '', (value) => {
             editor.setValue(value)

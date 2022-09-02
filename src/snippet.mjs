@@ -26,15 +26,15 @@ body {
 const nesting = t`
 section {
   margin: 10px;
-}
-section nav {
-  height: 25px;
-}
-section nav a {
-  color: #0982C1;
-}
-section nav a:hover {
-  text-decoration: underline;
+  nav {
+    height: 25px;
+    a {
+      color: #0982C1;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 `
 
@@ -170,7 +170,7 @@ body {
 }
 .content {
   float: left;
-  width: $siteWidth - ($sidebarWidth $gutterWidth);
+  width: $siteWidth - ($sidebarWidth + $gutterWidth);
 }
 .sidebar {
   float: left;
@@ -189,12 +189,70 @@ body {
 }
 .content {
   float: left;
-  width: @siteWidth - (@sidebarWidth @gutterWidth);
+  width: @siteWidth - (@sidebarWidth + @gutterWidth);
 }
 .sidebar {
   float: left;
   margin-left: @gutterWidth;
   width: @sidebarWidth;
+}
+`
+
+const dv_s = t`
+$color: black;
+.scoped {
+  $bg: blue;
+  $color: white;
+  color: $color;
+  background-color: $bg;
+}
+.unscoped {
+  color: $color;
+  // Would be an error
+  // background: $bg;
+} 
+`
+
+const dv_l = t`
+@color: black;
+.scoped {
+  @bg: blue;
+  @color: white;
+  color: @color;
+  background-color: @bg;
+ }
+.unscoped {
+  color: @color;
+  // Would be an error
+  // background: @bg;
+}
+`
+
+const ifelse_s = t`
+@mixin bw($color) {
+  @if lightness($color) > 30% {
+    background-color: black;
+  }
+  @else {
+    background-color: white;
+  }
+}
+
+.bg {
+  @include bw(blue);
+}
+`
+
+const ifelse_l = t`
+.bw (@color) when (lightness(@color) > 30%) {
+  background-color: black;
+}
+.bw (@color) when (lightness(@color) =< 30%) {
+  background-color: white;
+}
+
+.bg {
+  .bw(blue);
 }
 `
 
@@ -226,5 +284,13 @@ export default {
   columns: {
     scss: columns_s,
     less: columns_l,
+  },
+  dv: {
+    scss: dv_s,
+    less: dv_l,
+  },
+  ifelse: {
+    scss: ifelse_s,
+    less: ifelse_l,
   }
 }
