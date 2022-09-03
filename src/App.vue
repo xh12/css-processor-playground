@@ -27,6 +27,7 @@
         to.value = res.css 
       })
     } else {
+      console.log('less change')
       window.less.render(value)
         .then(v => {
           to.value = v.css
@@ -44,8 +45,9 @@
     from.value = snippet[type][language.value]
   }
 
-  function onchange(a) {
-    console.log(a)
+  function onchange(value) {
+    console.log(value)
+    from.value = value
   }
 </script>
 
